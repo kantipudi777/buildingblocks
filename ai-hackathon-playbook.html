@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Hackathon Winning Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #080C12;
+    --surface: #0E1420;
+    --surface2: #141C2E;
+    --border: rgba(255,255,255,0.07);
+    --accent: #00F5A0;
+    --accent2: #F5A623;
+    --accent3: #5B8DEF;
+    --text: #E8EDF5;
+    --muted: #7A8599;
+    --danger: #FF4D6D;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 15px;
+    line-height: 1.75;
+    overflow-x: hidden;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 80px 24px;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,245,160,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 40% at 80% 80%, rgba(91,141,239,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 10% 70%, rgba(245,166,35,0.05) 0%, transparent 60%);
+    pointer-events: none;
+  }
+
+  .grid-bg {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 48px 48px;
+    pointer-events: none;
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,245,160,0.1);
+    border: 1px solid rgba(0,245,160,0.3);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 32px;
+    animation: fadein 0.6s ease both;
+  }
+
+  .badge::before { content: '●'; font-size: 8px; animation: pulse 2s infinite; }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @keyframes fadein {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .hero h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(38px, 7vw, 88px);
+    font-weight: 800;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    animation: fadein 0.7s 0.1s ease both;
+  }
+
+  .hero h1 span.g {
+    background: linear-gradient(135deg, var(--accent) 0%, #00C4FF 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p.sub {
+    max-width: 620px;
+    font-size: 17px;
+    color: var(--muted);
+    line-height: 1.7;
+    animation: fadein 0.7s 0.2s ease both;
+    margin-bottom: 48px;
+  }
+
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 8px;
+    max-width: 860px;
+    width: 100%;
+    animation: fadein 0.7s 0.3s ease both;
+  }
+
+  .toc-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    padding: 10px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 12px;
+    font-weight: 500;
+    transition: all 0.2s;
+  }
+
+  .toc-item:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,245,160,0.05);
+  }
+
+  .toc-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--accent);
+    opacity: 0.6;
+    min-width: 24px;
+  }
+
+  /* ── LAYOUT ── */
+  main { max-width: 900px; margin: 0 auto; padding: 0 24px 120px; }
+
+  /* ── SECTION ── */
+  .section {
+    margin-bottom: 80px;
+    animation: fadein 0.5s ease both;
+  }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent);
+    background: rgba(0,245,160,0.1);
+    border: 1px solid rgba(0,245,160,0.25);
+    padding: 4px 10px;
+    border-radius: 4px;
+    letter-spacing: 0.1em;
+  }
+
+  .section h2 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+
+  /* ── CARDS ── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    transition: border-color 0.2s;
+  }
+
+  .card:hover { border-color: rgba(255,255,255,0.12); }
+
+  .card h3 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .card h3 .icon {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .card p { color: var(--muted); font-size: 14px; }
+
+  /* ── HIGHLIGHT CARDS ── */
+  .card.accent-green { border-left: 3px solid var(--accent); }
+  .card.accent-amber { border-left: 3px solid var(--accent2); }
+  .card.accent-blue  { border-left: 3px solid var(--accent3); }
+  .card.accent-red   { border-left: 3px solid var(--danger); }
+
+  /* ── CHECKLIST ── */
+  .checklist {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 12px;
+  }
+
+  .checklist li {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    font-size: 14px;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  .checklist li::before {
+    content: '✓';
+    min-width: 20px;
+    height: 20px;
+    background: rgba(0,245,160,0.12);
+    border: 1px solid rgba(0,245,160,0.3);
+    color: var(--accent);
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 1px;
+    flex-shrink: 0;
+  }
+
+  .checklist li.warn::before {
+    content: '✗';
+    background: rgba(255,77,109,0.1);
+    border-color: rgba(255,77,109,0.3);
+    color: var(--danger);
+  }
+
+  .checklist li.tip::before {
+    content: '★';
+    background: rgba(245,166,35,0.1);
+    border-color: rgba(245,166,35,0.3);
+    color: var(--accent2);
+  }
+
+  .checklist li strong { color: var(--text); font-weight: 500; }
+
+  /* ── TWO-COL GRID ── */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 640px) { .two-col { grid-template-columns: 1fr; } }
+
+  /* ── TIMELINE ── */
+  .timeline { position: relative; padding-left: 32px; }
+
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), var(--accent3), transparent);
+  }
+
+  .tl-item {
+    position: relative;
+    margin-bottom: 24px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 16px 20px;
+  }
+
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -27px;
+    top: 18px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 2px solid var(--bg);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  .tl-time {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    font-weight: 700;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+  }
+
+  .tl-item h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .tl-item p { font-size: 13px; color: var(--muted); }
+
+  /* ── SLIDE DECK ── */
+  .slides { display: grid; gap: 12px; }
+
+  .slide {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 24px;
+    display: grid;
+    grid-template-columns: 56px 1fr;
+    gap: 16px;
+    align-items: start;
+    transition: border-color 0.2s;
+  }
+
+  .slide:hover { border-color: var(--accent3); }
+
+  .slide-num {
+    width: 44px; height: 44px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--accent3);
+  }
+
+  .slide h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .slide p { font-size: 13px; color: var(--muted); }
+
+  /* ── ROLE CARDS ── */
+  .role-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; }
+
+  .role-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 18px 16px;
+    text-align: center;
+  }
+
+  .role-icon { font-size: 28px; margin-bottom: 8px; }
+
+  .role-card h4 {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+
+  .role-card p { font-size: 12px; color: var(--muted); }
+
+  /* ── FRAMEWORK BOX ── */
+  .framework {
+    background: linear-gradient(135deg, rgba(0,245,160,0.04) 0%, rgba(91,141,239,0.04) 100%);
+    border: 1px solid rgba(0,245,160,0.15);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 16px;
+  }
+
+  .framework h3 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    color: var(--accent);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  /* ── CALLOUT ── */
+  .callout {
+    display: flex;
+    gap: 16px;
+    background: rgba(245,166,35,0.06);
+    border: 1px solid rgba(245,166,35,0.2);
+    border-radius: 10px;
+    padding: 20px 22px;
+    margin: 16px 0;
+    font-size: 14px;
+    color: var(--text);
+  }
+
+  .callout .co-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+
+  .callout.blue {
+    background: rgba(91,141,239,0.06);
+    border-color: rgba(91,141,239,0.2);
+  }
+
+  .callout.green {
+    background: rgba(0,245,160,0.05);
+    border-color: rgba(0,245,160,0.2);
+  }
+
+  /* ── TAG ROW ── */
+  .tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+
+  .tag {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+  }
+
+  .tag.green { color: var(--accent); border-color: rgba(0,245,160,0.2); background: rgba(0,245,160,0.06); }
+  .tag.amber { color: var(--accent2); border-color: rgba(245,166,35,0.2); background: rgba(245,166,35,0.06); }
+  .tag.blue  { color: var(--accent3); border-color: rgba(91,141,239,0.2);  background: rgba(91,141,239,0.06); }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 60px 24px;
+    color: var(--muted);
+    font-size: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    border-top: 1px solid var(--border);
+    letter-spacing: 0.05em;
+  }
+
+  footer span { color: var(--accent); }
+
+  /* ── DIVIDER ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--border), transparent);
+    margin: 24px 0;
+  }
+
+  /* ── SCORE BAR ── */
+  .score-item { margin-bottom: 16px; }
+  .score-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    margin-bottom: 6px;
+  }
+  .score-label span:first-child { color: var(--text); font-weight: 500; }
+  .score-label span:last-child { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .score-bar { height: 6px; background: var(--surface2); border-radius: 100px; overflow: hidden; }
+  .score-fill { height: 100%; border-radius: 100px; background: linear-gradient(to right, var(--accent), #00C4FF); }
+
+  /* ── META BLOCK ── */
+  .meta-block {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 28px;
+    margin-bottom: 40px;
+    animation: fadein 0.7s 0.25s ease both;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .meta-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0 28px;
+    gap: 4px;
+  }
+
+  .meta-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .meta-value {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .meta-divider {
+    width: 1px;
+    height: 32px;
+    background: var(--border);
+    flex-shrink: 0;
+  }
+
+  @media (max-width: 600px) {
+    .meta-block { flex-direction: column; padding: 16px; }
+    .meta-item { padding: 8px 0; }
+    .meta-divider { width: 80%; height: 1px; }
+  }
+
+  /* scroll behavior */
+  html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="hero">
+  <div class="grid-bg"></div>
+  <div class="badge">AI Hackathon Playbook 2025</div>
+  <h1>Win Your<br><span class="g">Hackathon.</span></h1>
+  <p class="sub">
+    A battle-tested, judge-informed strategy guide for distributed teams competing in AI hackathons — from idea to demo to winning pitch.
+  </p>
+  <div class="meta-block">
+    <div class="meta-item">
+      <span class="meta-label">Prepared For</span>
+      <span class="meta-value">Outskill AI Generalist Hackathon Team · Group #20</span>
+    </div>
+    <div class="meta-divider"></div>
+    <div class="meta-item">
+      <span class="meta-label">Prepared By</span>
+      <span class="meta-value">Mohan Kantipudi</span>
+    </div>
+    <div class="meta-divider"></div>
+    <div class="meta-item">
+      <span class="meta-label">Date</span>
+      <span class="meta-value">March 5, 2026</span>
+    </div>
+  </div>
+
+  <nav class="toc-grid">
+    <a href="#s1" class="toc-item"><span class="toc-num">01</span> Winning Mindset</a>
+    <a href="#s2" class="toc-item"><span class="toc-num">02</span> Idea Selection</a>
+    <a href="#s3" class="toc-item"><span class="toc-num">03</span> Project Strategy</a>
+    <a href="#s4" class="toc-item"><span class="toc-num">04</span> Remote Collab</a>
+    <a href="#s5" class="toc-item"><span class="toc-num">05</span> Dev Workflow</a>
+    <a href="#s6" class="toc-item"><span class="toc-num">06</span> AI Integration</a>
+    <a href="#s7" class="toc-item"><span class="toc-num">07</span> Demo Strategy</a>
+    <a href="#s8" class="toc-item"><span class="toc-num">08</span> Pitch Deck</a>
+    <a href="#s9" class="toc-item"><span class="toc-num">09</span> Judging Criteria</a>
+    <a href="#s10" class="toc-item"><span class="toc-num">10</span> Winning Tricks</a>
+  </nav>
+</section>
+
+<main>
+
+<!-- ══ SECTION 1 ══ -->
+<section class="section" id="s1">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <h2>Hackathon Winning Mindset</h2>
+  </div>
+
+  <div class="card accent-green">
+    <h3><span class="icon">🏆</span> What Judges Actually Look For</h3>
+    <ul class="checklist">
+      <li><strong>Wow-within-30-seconds:</strong> The first 30 seconds of your demo must deliver undeniable value. Judges watch dozens — make yours stick immediately.</li>
+      <li><strong>Real-world problem, not a toy:</strong> Judges ask "would someone pay for this?" or "does this solve a genuine pain?" The more specific the user, the better.</li>
+      <li><strong>Clever use of AI:</strong> AI should be core — not sprinkled. The model should do something humans genuinely cannot do as fast or as well.</li>
+      <li><strong>Execution quality:</strong> A polished, working demo beats a brilliant idea that doesn't run. Judges remember what they see, not what they're told.</li>
+      <li><strong>Team energy & conviction:</strong> Passion is contagious. Teams that believe in their idea radiate confidence that judges find hard to discount.</li>
+    </ul>
+  </div>
+
+  <div class="two-col">
+    <div class="card accent-red">
+      <h3><span class="icon">⚠️</span> Common Mistakes</h3>
+      <ul class="checklist">
+        <li class="warn"><strong>Over-scoping:</strong> Building too much and shipping a half-baked mess.</li>
+        <li class="warn"><strong>AI as decoration:</strong> Calling an API once and claiming "AI-powered."</li>
+        <li class="warn"><strong>No user story:</strong> Building without a clear "who is this for?"</li>
+        <li class="warn"><strong>Weak demo:</strong> Showing slides instead of a live working product.</li>
+        <li class="warn"><strong>Poor pitch time:</strong> Spending 4 of 5 minutes on context, 1 on demo.</li>
+        <li class="warn"><strong>No backup plan:</strong> One bad API call crashes the live demo.</li>
+      </ul>
+    </div>
+    <div class="card accent-amber">
+      <h3><span class="icon">✨</span> Traits of Winning Projects</h3>
+      <ul class="checklist">
+        <li class="tip"><strong>Focused:</strong> One user, one problem, one elegant solution.</li>
+        <li class="tip"><strong>Demonstrable:</strong> You can show it working in 2 minutes.</li>
+        <li class="tip"><strong>Memorable hook:</strong> A surprising or counterintuitive finding.</li>
+        <li class="tip"><strong>Technically impressive:</strong> At least one "how did you do that?" moment.</li>
+        <li class="tip"><strong>Story-driven:</strong> "Here's Sarah, she loses 3 hours a week to X…"</li>
+        <li class="tip"><strong>Scalable vision:</strong> The judges can imagine this as a real product.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 2 ══ -->
+<section class="section" id="s2">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <h2>Idea Selection Framework</h2>
+  </div>
+
+  <div class="callout">
+    <span class="co-icon">⏱️</span>
+    <div><strong>Rule:</strong> Spend max 90 minutes on ideation. Use the last 30 minutes to commit — indecision kills hackathon teams more than bad ideas do. A mediocre idea executed brilliantly beats a brilliant idea executed poorly every time.</div>
+  </div>
+
+  <div class="framework">
+    <h3>⚡ The FIRE Framework — Idea Scoring Matrix</h3>
+    <div class="two-col">
+      <ul class="checklist">
+        <li><strong>F — Feasibility:</strong> Can you ship a working demo in time? Score 1–5.</li>
+        <li><strong>I — Impact:</strong> How many people does it help, and how much? Score 1–5.</li>
+        <li><strong>R — AI Relevance:</strong> Does AI solve this in a way nothing else could? Score 1–5.</li>
+        <li><strong>E — Excitement:</strong> Does your whole team want to build it? Score 1–5.</li>
+      </ul>
+      <div>
+        <p style="color:var(--muted);font-size:13px;margin-bottom:12px;">Pick the idea with the highest total FIRE score. If two ideas tie — pick the simpler one to build.</p>
+        <div class="tags">
+          <span class="tag green">≥17 = Build it</span>
+          <span class="tag amber">13–16 = Refine it</span>
+          <span class="tag">≤12 = Drop it</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent-blue">
+    <h3><span class="icon">🔍</span> Finding High-Impact Problems Fast</h3>
+    <ul class="checklist">
+      <li>Look at your team's own daily frustrations — you know the problem intimately.</li>
+      <li>Check Reddit, Twitter/X, and ProductHunt for recent complaints in your target domain.</li>
+      <li>Ask: "What takes a human expert hours that AI could do in seconds?"</li>
+      <li>Target verticals with data abundance: healthcare, legal, education, finance, logistics.</li>
+      <li>Look for tasks that are repetitive, high-stakes, and currently manual.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">✅</span> Problem–Solution Fit Validation (10-Minute Test)</h3>
+    <ul class="checklist">
+      <li>Can you describe the target user in one sentence? <em>(If not, too broad.)</em></li>
+      <li>Can you name 3 people who would use this today? <em>(Real people, not hypothetical.)</em></li>
+      <li>Is the current solution a manual process, a spreadsheet, or "nothing"? <em>(Perfect.)</em></li>
+      <li>Does the AI component feel essential — not cosmetic? <em>(Would it work without AI? If yes, rethink.)</em></li>
+      <li>Can you demo the core value in under 2 minutes? <em>(If no, it's too complex.)</em></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══ SECTION 3 ══ -->
+<section class="section" id="s3">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <h2>Hackathon Project Strategy</h2>
+  </div>
+
+  <div class="framework">
+    <h3>📦 MVP Definition Protocol</h3>
+    <p style="color:var(--muted);font-size:14px;margin-bottom:16px;">For every feature, ask: <strong style="color:var(--text)">"Does removing this feature break the demo?"</strong> If no — cut it. Your MVP is the fewest features that make judges say "wow."</p>
+    <div class="two-col">
+      <div>
+        <p style="font-size:12px;color:var(--accent);font-family:'JetBrains Mono',monospace;font-weight:700;margin-bottom:8px;letter-spacing:0.1em;">MUST HAVE (BUILD FIRST)</p>
+        <ul class="checklist">
+          <li>Core AI functionality working end-to-end</li>
+          <li>A clean input → output user flow</li>
+          <li>Basic but functional UI</li>
+          <li>Real data (not lorem ipsum)</li>
+        </ul>
+      </div>
+      <div>
+        <p style="font-size:12px;color:var(--accent2);font-family:'JetBrains Mono',monospace;font-weight:700;margin-bottom:8px;letter-spacing:0.1em;">NICE TO HAVE (IF TIME)</p>
+        <ul class="checklist">
+          <li>User authentication / accounts</li>
+          <li>Database persistence</li>
+          <li>Advanced error handling</li>
+          <li>Mobile responsiveness</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="card accent-green">
+    <h3><span class="icon">🎯</span> Scoping for Impressiveness vs. Feasibility</h3>
+    <ul class="checklist">
+      <li><strong>Pick one killer feature</strong> and make it extraordinary. Depth beats breadth in hackathons.</li>
+      <li><strong>Use APIs aggressively:</strong> OpenAI, Anthropic, Replicate, ElevenLabs, Pinecone — don't rebuild what exists.</li>
+      <li><strong>Hard-code where necessary:</strong> Fake the parts that aren't core; polish what judges will actually see.</li>
+      <li><strong>Time-box every feature:</strong> Set a hard cut-off — if a feature takes more than 2 hours, it's probably not MVP.</li>
+      <li><strong>Build the demo path first:</strong> Know exactly what flow you'll show judges, and build that end-to-end before anything else.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══ SECTION 4 ══ -->
+<section class="section" id="s4">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <h2>Remote Team Collaboration Strategy</h2>
+  </div>
+
+  <div class="role-grid">
+    <div class="role-card">
+      <div class="role-icon">🤖</div>
+      <h4>AI Engineer</h4>
+      <p>Prompt engineering, model selection, RAG pipeline, API integration</p>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">🎨</div>
+      <h4>Frontend Dev</h4>
+      <p>UI/UX, demo flow polish, Tailwind/React, the visual "wow" factor</p>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">⚙️</div>
+      <h4>Backend Dev</h4>
+      <p>APIs, data pipeline, server, database, deployment</p>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">📊</div>
+      <h4>Pitch Lead</h4>
+      <p>Slides, narrative, demo script, talking points, timing</p>
+    </div>
+    <div class="role-card">
+      <div class="role-icon">🧪</div>
+      <h4>QA / Data</h4>
+      <p>Test cases, curate demo data, integration testing, edge cases</p>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <div class="two-col">
+    <div class="card accent-blue">
+      <h3><span class="icon">🛠️</span> Recommended Tool Stack</h3>
+      <ul class="checklist">
+        <li><strong>GitHub:</strong> Single shared repo, one branch per role, merge frequently.</li>
+        <li><strong>Discord / Slack:</strong> Voice channel open 24/7, async updates in text.</li>
+        <li><strong>Notion / Linear:</strong> Task board — every task has an owner and deadline.</li>
+        <li><strong>Figma:</strong> Shared wireframe for UI — frontend never guesses the design.</li>
+        <li><strong>Loom:</strong> Record short async updates across time zones.</li>
+        <li><strong>Vercel / Railway:</strong> Instant deployment — everyone can see live progress.</li>
+      </ul>
+    </div>
+    <div class="card accent-amber">
+      <h3><span class="icon">⏰</span> Time Zone Coordination</h3>
+      <ul class="checklist">
+        <li>Set one "standup" time everyone can attend — keep it to 15 mins.</li>
+        <li>Use UTC for all deadlines — no confusion about AM/PM.</li>
+        <li>Assign work in clearly independent modules to avoid blocking.</li>
+        <li>Use async video updates (Loom) for context-heavy explanations.</li>
+        <li>Define a "ship captain" — one person with final merge authority.</li>
+        <li>Set a hard freeze time 3 hours before submission — no new features.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout blue">
+    <span class="co-icon">💡</span>
+    <div><strong>Pro tip:</strong> Create a shared <code style="background:var(--surface2);padding:2px 6px;border-radius:4px;font-size:12px;">DEMO_SCRIPT.md</code> on day 1. Every team member should know the demo flow by heart before coding starts. This prevents building features that don't appear in the demo.</div>
+  </div>
+</section>
+
+<!-- ══ SECTION 5 ══ -->
+<section class="section" id="s5">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <h2>Rapid Development Workflow</h2>
+  </div>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-time">HOUR 0–2 · ALIGNMENT</div>
+      <h4>🎯 Ideate, Decide & Align</h4>
+      <p>Use FIRE framework. Pick idea. Define user story. Write DEMO_SCRIPT.md. Assign roles. Set up repo, Discord, Notion board. Everyone aligned before a single line of code.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">HOUR 2–6 · FOUNDATION</div>
+      <h4>🏗️ Parallel Build Sprint 1 — Skeleton</h4>
+      <p>AI Eng: core prompt/pipeline working in a notebook. Backend: basic API endpoints + data schema. Frontend: UI wireframe coded (static, no real data). Pitch Lead: slide deck draft v1.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">HOUR 6–14 · INTEGRATION</div>
+      <h4>🔌 Connect Everything</h4>
+      <p>Frontend ↔ Backend ↔ AI pipeline integrated. First end-to-end run of the demo flow. Identify and fix blockers. Polish core experience. QA tests the demo path thoroughly.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">HOUR 14–20 · POLISH</div>
+      <h4>✨ Iteration & Hardening</h4>
+      <p>UI polish. Real curated demo data loaded. Error handling for the demo path. Backup demo video recorded. Slide deck finalized. Pitch practiced once as a team.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">HOUR 20–24 · FREEZE & REHEARSE</div>
+      <h4>🔒 Feature Freeze + Full Rehearsal</h4>
+      <p>No new features. Fix only critical bugs. Full pitch rehearsal ×2. Time it exactly. Deploy to a stable URL. Everyone sleeps if possible. Designate a demo driver.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-time">SUBMISSION</div>
+      <h4>🚀 Ship It</h4>
+      <p>Submit 30 minutes early — never at the wire. Test the submission link. Have the backup demo video ready. Team is rested and confident.</p>
+    </div>
+  </div>
+
+  <div class="callout green">
+    <span class="co-icon">🔁</span>
+    <div><strong>Iteration rule:</strong> Every 3 hours, each person does a 2-minute async update: "Done, doing, blocked." Blockers get immediate attention. Never let a blocker sit for more than 1 hour without escalation.</div>
+  </div>
+</section>
+
+<!-- ══ SECTION 6 ══ -->
+<section class="section" id="s6">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <h2>AI Integration Best Practices</h2>
+  </div>
+
+  <div class="two-col">
+    <div class="card accent-green">
+      <h3><span class="icon">🧠</span> LLMs — Do This</h3>
+      <ul class="checklist">
+        <li>Use <strong>structured outputs / JSON mode</strong> for reliable parsing.</li>
+        <li>Chain prompts (multi-step reasoning) rather than one mega-prompt.</li>
+        <li>Use <strong>system prompts</strong> to give the model a specific expert persona.</li>
+        <li>Add few-shot examples for consistent output quality.</li>
+        <li>Log all prompts/responses for debugging during the hackathon.</li>
+      </ul>
+    </div>
+    <div class="card accent-red">
+      <h3><span class="icon">🚫</span> "AI Wrapper" Traps</h3>
+      <ul class="checklist">
+        <li class="warn">One-shot GPT call with no domain context or specialization.</li>
+        <li class="warn">Building a "ChatGPT for X" where X adds no real constraint.</li>
+        <li class="warn">Calling yourself AI-powered when AI is just the UI text generator.</li>
+        <li class="warn">No evaluation — you don't know if your prompts actually work well.</li>
+        <li class="warn">Using AI to explain something a search bar already does fine.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card accent-blue">
+    <h3><span class="icon">🔗</span> Advanced Techniques That Impress Judges</h3>
+    <ul class="checklist">
+      <li><strong>RAG (Retrieval-Augmented Generation):</strong> Ground LLM answers in private/domain-specific data using a vector DB (Pinecone, Chroma, Weaviate). Eliminates hallucinations and feels genuinely powerful.</li>
+      <li><strong>AI Agents with tool use:</strong> Let the model take actions — browse, calculate, query APIs, write files. Autonomous agents are visually dramatic in demos.</li>
+      <li><strong>Multi-modal inputs:</strong> Combine text + image + audio. Judges who see a model process voice + screen = impressed.</li>
+      <li><strong>Fine-tuned / specialized prompting:</strong> Show you understand the domain. A prompt engineered for oncology reads differently than generic GPT.</li>
+      <li><strong>Real-time streaming:</strong> Stream tokens to the UI. Seeing the model "think" live feels magical vs. a spinner then dump.</li>
+    </ul>
+  </div>
+
+  <div class="framework">
+    <h3>🏗️ Recommended AI Stack for Speed</h3>
+    <div class="tags">
+      <span class="tag green">Claude 3.5 / GPT-4o</span>
+      <span class="tag green">LangChain / LlamaIndex</span>
+      <span class="tag blue">Pinecone / Chroma</span>
+      <span class="tag blue">Whisper (speech)</span>
+      <span class="tag amber">Replicate (images/video)</span>
+      <span class="tag amber">ElevenLabs (voice)</span>
+      <span class="tag">Vercel AI SDK</span>
+      <span class="tag">FastAPI backend</span>
+      <span class="tag">Next.js frontend</span>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 7 ══ -->
+<section class="section" id="s7">
+  <div class="section-header">
+    <span class="section-num">07</span>
+    <h2>Demo Strategy</h2>
+  </div>
+
+  <div class="callout">
+    <span class="co-icon">🎬</span>
+    <div><strong>The Golden Rule:</strong> Your demo is not a feature walkthrough — it's a story with a hero (your user), a villain (the problem), and your product as the magic sword. Every second of screen time should advance that story or be cut.</div>
+  </div>
+
+  <div class="card accent-green">
+    <h3><span class="icon">🎯</span> Designing a Powerful Demo</h3>
+    <ul class="checklist">
+      <li><strong>Open with the pain:</strong> Show the manual, broken, or tedious current state first — even briefly. Makes your solution feel like relief.</li>
+      <li><strong>One click to wow:</strong> Structure the demo so the most impressive output comes within the first 60 seconds.</li>
+      <li><strong>Use real, curated data:</strong> Never use "lorem ipsum" or fake data. Use data that is recognizable, emotional, or impressive to the audience.</li>
+      <li><strong>Narrate outcomes, not mechanics:</strong> Say "it just saved Sarah 4 hours" not "it calls the OpenAI API and parses the JSON."</li>
+      <li><strong>Show speed:</strong> If your AI does something fast — zoom in on it. Time comparisons are viscerally compelling ("5 seconds vs. 2 days").</li>
+      <li><strong>End on a vision moment:</strong> Show one glimpse of where this goes in 12 months. Leave judges imagining the future.</li>
+    </ul>
+  </div>
+
+  <div class="two-col">
+    <div class="card accent-amber">
+      <h3><span class="icon">🛡️</span> Backup Strategies</h3>
+      <ul class="checklist">
+        <li>Record a polished screen recording before the event — upload as "backup demo."</li>
+        <li>Hardcode a set of "golden" demo inputs that always produce great outputs.</li>
+        <li>Have a local environment running in case internet fails.</li>
+        <li>Cache API responses for critical demo paths.</li>
+        <li>Have a second team member ready to drive if the presenter has issues.</li>
+      </ul>
+    </div>
+    <div class="card accent-blue">
+      <h3><span class="icon">⚡</span> Immediate Value Clarity</h3>
+      <ul class="checklist">
+        <li>Write a one-sentence value proposition that a 10-year-old understands.</li>
+        <li>Show before/after — split screen or sequential. Visual contrast is powerful.</li>
+        <li>Put the most impressive number on screen: "↓ 90% time saved."</li>
+        <li>Avoid jargon in the first 60 seconds. Judges are not all technical.</li>
+        <li>Make sure the UI is large enough to read on a projected screen.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 8 ══ -->
+<section class="section" id="s8">
+  <div class="section-header">
+    <span class="section-num">08</span>
+    <h2>Winning Pitch Deck Structure</h2>
+  </div>
+
+  <div class="callout blue">
+    <span class="co-icon">📐</span>
+    <div><strong>Format:</strong> 5–7 slides maximum. Total pitch time: 3–5 minutes. Practice until you can deliver the whole thing without notes. Judges forgive imperfect products — they don't forgive unclear value propositions.</div>
+  </div>
+
+  <div class="slides">
+    <div class="slide">
+      <div class="slide-num">01</div>
+      <div>
+        <h4>🔴 The Problem</h4>
+        <p>Tell a specific story. One user. One painful moment. Quantify the pain: "This costs SMBs $47B/year" or "takes 6 hours manually." Use an image, not bullet points. Make judges feel the problem before you show the solution.</p>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="slide-num">02</div>
+      <div>
+        <h4>💡 The Solution</h4>
+        <p>One clear sentence: "[Product] helps [user] do [outcome] by [mechanism]." Show a product screenshot or short GIF — not an architecture diagram. The solution slide should make someone say "oh, that's clever."</p>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="slide-num">03</div>
+      <div>
+        <h4>🤖 AI Innovation</h4>
+        <p>This is your technical credibility slide. Explain specifically why AI is essential here — not optional. Name the model/technique. Show a visual of the AI pipeline. Include one surprising capability ("it can even handle…").</p>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="slide-num">04</div>
+      <div>
+        <h4>📈 Market Impact</h4>
+        <p>Who is the user and how many exist? Use a real TAM number from a credible source. Show 2–3 real-world validation signals: quotes, market data, or competitive landscape. Keep it one slide — don't drown in numbers.</p>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="slide-num">05</div>
+      <div>
+        <h4>🎬 Live Demo</h4>
+        <p>This is not a slide — this is the centerpiece. Follow your DEMO_SCRIPT exactly. Keep it under 2 minutes. Have a team member on backup. If something goes wrong, your recorded backup plays instantly — never apologize, just transition.</p>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="slide-num">06</div>
+      <div>
+        <h4>🚀 Future Vision</h4>
+        <p>3 bullet points max. Show the 6-month, 12-month, and 3-year version of this product. This slide should feel inevitable, not speculative. End with a call to action: "We're looking for [partners/users/feedback/investment]."</p>
+      </div>
+    </div>
+    <div class="slide">
+      <div class="slide-num">07</div>
+      <div>
+        <h4>👥 The Team <span style="color:var(--muted);font-size:12px;font-weight:400;">(optional but powerful)</span></h4>
+        <p>If your team has relevant domain expertise or impressive backgrounds, add one concise team slide. Show why your team is uniquely positioned to build this. "We've spent 5 years in this industry" is a massive credibility booster.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ SECTION 9 ══ -->
+<section class="section" id="s9">
+  <div class="section-header">
+    <span class="section-num">09</span>
+    <h2>Judging Criteria Optimization</h2>
+  </div>
+
+  <div class="card">
+    <h3><span class="icon">📊</span> How Judges Typically Weight Criteria</h3>
+    <div style="margin-top:16px;">
+      <div class="score-item">
+        <div class="score-label"><span>Innovation / Novelty</span><span>25%</span></div>
+        <div class="score-bar"><div class="score-fill" style="width:100%;background:linear-gradient(to right,var(--accent),#00C4FF)"></div></div>
+      </div>
+      <div class="score-item">
+        <div class="score-label"><span>Demo & Presentation Quality</span><span>25%</span></div>
+        <div class="score-bar"><div class="score-fill" style="width:100%;background:linear-gradient(to right,var(--accent),#00C4FF)"></div></div>
+      </div>
+      <div class="score-item">
+        <div class="score-label"><span>Real-World Impact / Use Case</span><span>20%</span></div>
+        <div class="score-bar"><div class="score-fill" style="width:80%;background:linear-gradient(to right,var(--accent2),#F5D020)"></div></div>
+      </div>
+      <div class="score-item">
+        <div class="score-label"><span>Technical Complexity / Depth</span><span>20%</span></div>
+        <div class="score-bar"><div class="score-fill" style="width:80%;background:linear-gradient(to right,var(--accent2),#F5D020)"></div></div>
+      </div>
+      <div class="score-item">
+        <div class="score-label"><span>Feasibility / Business Potential</span><span>10%</span></div>
+        <div class="score-bar"><div class="score-fill" style="width:40%;background:linear-gradient(to right,var(--accent3),#7B61FF)"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="two-col">
+    <div class="card accent-green">
+      <h3><span class="icon">💡</span> Optimizing for Innovation</h3>
+      <ul class="checklist">
+        <li>Combine two domains nobody has combined before (e.g., AI + supply chain + satellite data).</li>
+        <li>Use a model in an unconventional way — zero-shot classification, creative prompt chaining.</li>
+        <li>Identify a "last mile" problem that existing tools don't solve and hammer it.</li>
+        <li>Show a surprising finding or unexpected capability during the demo.</li>
+      </ul>
+    </div>
+    <div class="card accent-amber">
+      <h3><span class="icon">⚙️</span> Technical Depth Signals</h3>
+      <ul class="checklist">
+        <li>Mention your architecture briefly — RAG, agentic loop, vector search, fine-tuning.</li>
+        <li>Show a technical diagram on one slide — signals engineering maturity.</li>
+        <li>Quantify performance: latency, accuracy, token efficiency.</li>
+        <li>Mention an obstacle you overcame — it shows depth of implementation.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card accent-blue">
+    <h3><span class="icon">🌍</span> Maximizing Impact Score</h3>
+    <ul class="checklist">
+      <li>Attach a real user story — ideally someone you spoke to during the hackathon.</li>
+      <li>Quantify saved time, money, errors, or lives. Use conservative, defensible numbers.</li>
+      <li>Target an underserved or overlooked user group — judges reward empathy.</li>
+      <li>Show a path to the market: "We could reach 10K users via X channel in 6 months."</li>
+      <li>Name competitors and explain precisely why your approach is different or better.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ══ SECTION 10 ══ -->
+<section class="section" id="s10">
+  <div class="section-header">
+    <span class="section-num">10</span>
+    <h2>Hackathon Winning Tricks</h2>
+  </div>
+
+  <div class="card accent-amber">
+    <h3><span class="icon">🥇</span> Techniques from Past Winning Teams</h3>
+    <ul class="checklist">
+      <li class="tip"><strong>Talk to a real user in Hour 1:</strong> Tweet, post on LinkedIn, or call someone in the target domain. 5 minutes of user research gives you authentic language and credibility judges can't ignore.</li>
+      <li class="tip"><strong>Name your project memorably:</strong> Judges score 20+ projects. "HealthBot" dies. "ClarityMD" lives. A name that evokes the value is a free branding win.</li>
+      <li class="tip"><strong>The "Holy Sh*t" moment:</strong> Engineer one moment in the demo that's genuinely surprising. Could be a speed demo, an unexpected capability, or a counterintuitive result. Judges will quote it.</li>
+      <li class="tip"><strong>The live-data gambit:</strong> Use real, live data in your demo (live news, real GitHub repos, real tweets). Judges instinctively trust live data over canned examples.</li>
+      <li class="tip"><strong>Open source your repo:</strong> Push a clean README to GitHub before judging. Some judges look — it signals professionalism and lets technical judges validate your claims.</li>
+      <li class="tip"><strong>Gather early user metrics:</strong> If you can get 10 people to try your tool and show "90% found it faster than their current method" — that's a real signal in 24 hours.</li>
+    </ul>
+  </div>
+
+  <div class="two-col">
+    <div class="card accent-blue">
+      <h3><span class="icon">🧠</span> Psychology of Judging</h3>
+      <ul class="checklist">
+        <li>Judges remember the first and last thing they see — nail your opening hook and closing line.</li>
+        <li>Confidence is scored. Speak as if the product already exists and users love it.</li>
+        <li>Specificity signals expertise: "reduces legal review time by 73%" beats "much faster."</li>
+        <li>Eye contact (even on Zoom) and pacing signal preparation and conviction.</li>
+        <li>If a judge asks a tough question — say "great question" then answer it confidently, even partially.</li>
+      </ul>
+    </div>
+    <div class="card accent-green">
+      <h3><span class="icon">🌟</span> Standing Out in a Crowd</h3>
+      <ul class="checklist">
+        <li>Bring a visual identity — logo, consistent colors, branded slide deck. It reads as a real product.</li>
+        <li>Network with judges and mentors early. Familiarity creates warmth at judging time.</li>
+        <li>Do something no other team will: use live voice, integrate AR, show a physical device.</li>
+        <li>Write a compelling project description — this is often the first thing judges read before seeing your demo.</li>
+        <li>Submit a 60-second video pitch as a supplement — judges watch these on their phones between sessions.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="callout green">
+    <span class="co-icon">🏆</span>
+    <div>
+      <strong>The Meta-Strategy:</strong> The teams that win aren't always the most technically sophisticated — they're the ones who understood what judges remember after reviewing 30 projects in 4 hours. Engineer for memory, not completeness. One brilliant, working feature beats ten mediocre ones. Show conviction, tell a story, and let the demo speak louder than any slide.
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p>AI Hackathon Playbook · Built for distributed teams · <span>Good luck. Ship something that matters.</span></p>
+</footer>
+
+</body>
+</html>
